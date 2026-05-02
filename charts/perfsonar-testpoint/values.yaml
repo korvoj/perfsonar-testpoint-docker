@@ -11,8 +11,27 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
-  type: LoadBalancer
-  annotations: {}
+  default:
+    type: LoadBalancer
+    enabled: true
+    annotations: {}
+  # -- ClusterIP service with ClusterIP: none so that it resolves to the Pod IP address
+  headless:
+    enabled: true
+    annotations: {}
+
+# -- Optional ConfigMap mount for /etc/perfsonar/psconfig/pscheduler.d
+# enabled=false: nothing is mounted.
+# enabled=true with no data: the ConfigMap is mounted and expected to exist already.
+# any non-empty data: the ConfigMap is created from the provided data.
+# enabled=true with data: the created ConfigMap is also mounted.
+pschedulerConfigMap:
+  enabled: false
+  # -- Defaults to {{ $.Release.Name }}-pscheduler-d-configmap if not set
+  # name: existing-pscheduler-d-configmap
+  # data:
+  #   pscheduler.json: |
+  #     {}
 
 serviceAccount:
   create: false
@@ -37,11 +56,10 @@ securityContext: {}
 
 resources:
    limits:
-     cpu: 2000m
-     memory: 3072Mi
-   requests:
-     cpu: 1000m
      memory: 2048Mi
+   requests:
+     cpu: 500m
+     memory: 1024Mi
 
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 #livenessProbe:
@@ -67,5 +85,5 @@ affinity: {}
 
 persistence:
   storageClass: "-"
-  size: 10Gi
+  size: 3Gi
   accessMode: ReadWriteOnce

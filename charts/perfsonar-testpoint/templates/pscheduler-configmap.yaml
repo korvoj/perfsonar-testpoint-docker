@@ -1,0 +1,10 @@
+{{- with .Values.pschedulerConfigMap }}
+{{- with .data }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "perfsonar.pschedulerConfigMapName" $ }}
+data:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}

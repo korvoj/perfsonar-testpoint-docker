@@ -1,19 +1,19 @@
-{{- if .Values.service.default.enabled }}
+{{- if .Values.service.headless.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Release.Name }}-headless
   labels:
     {{- include "perfsonar.labels" . | nindent 4 }}
-    {{- if .Values.service.default.annotations }}
+    {{- if .Values.service.headless.annotations }}
   annotations:
-    {{- toYaml .Values.service.default.annotations | nindent 4}}
+    {{- toYaml .Values.service.headless.annotations | nindent 4 }}
     {{- end }}
 spec:
-  type: {{ .Values.service.default.type }}
+  type: ClusterIP
+  clusterIP: None
   ports:
     {{- include "perfsonar.servicePorts" . | nindent 4 }}
-
   selector:
     {{- include "perfsonar.selectorLabels" . | nindent 4 }}
 {{- end }}

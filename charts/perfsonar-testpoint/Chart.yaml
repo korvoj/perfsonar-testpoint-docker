@@ -2,5 +2,5 @@ apiVersion: v2
 name: perfsonar-testpoint
 description: A Helm chart for perfsonar-testpoint
 type: application
-version: 0.2.4-beta
+version: 0.2.5-beta
 appVersion: "5.2.4"

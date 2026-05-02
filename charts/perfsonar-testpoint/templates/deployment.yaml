@@ -13,10 +13,11 @@ spec:
     type: Recreate
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        configmap.reloader.stakater.com/reload: {{ include "perfsonar.reloaderConfigMapNames" . | quote }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "perfsonar.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
@@ -83,6 +84,11 @@ spec:
               mountPath: "/etc/perfsonar/psconfig/pscheduler-agent.json"
               subPath: pscheduler-agent.json
               readOnly: true
+            {{- if .Values.pschedulerConfigMap.enabled }}
+            - name: {{ .Release.Name }}-pschedulerd
+              mountPath: "/etc/perfsonar/psconfig/pscheduler.d"
+              readOnly: true
+            {{- end }}
             - name: {{ .Release.Name }}-owampconfig
               mountPath: "/etc/owamp-server/owamp-server.conf"
               subPath: owamp-server.conf
@@ -110,6 +116,11 @@ spec:
         - name: {{ .Release.Name }}-pscheduleragentconfig
           configMap:
             name: {{ .Release.Name }}-pscheduler-agent-configmap
+        {{- if .Values.pschedulerConfigMap.enabled }}
+        - name: {{ .Release.Name }}-pschedulerd
+          configMap:
+            name: {{ include "perfsonar.pschedulerConfigMapName" . }}
+        {{- end }}
         - name: {{ .Release.Name }}-owampconfig
           configMap:
             name: {{ .Release.Name }}-owamp-config 
