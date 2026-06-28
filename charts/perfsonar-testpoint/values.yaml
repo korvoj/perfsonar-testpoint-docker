@@ -20,6 +20,13 @@ service:
     enabled: true
     annotations: {}
 
+# -- Host network mode. When enabled, the pod binds directly to the node's network interface.
+# Recommended: set service.default.enabled=false when using this mode, as port exposure is
+# already handled by the host network. Only one replica should run per node to avoid
+# port binding conflicts.
+hostNetwork:
+  enabled: false
+
 # -- Optional ConfigMap mount for /etc/perfsonar/psconfig/pscheduler.d
 # enabled=false: nothing is mounted.
 # enabled=true with no data: the ConfigMap is mounted and expected to exist already.
