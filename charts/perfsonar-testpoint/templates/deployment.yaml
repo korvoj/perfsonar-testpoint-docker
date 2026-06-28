@@ -15,6 +15,9 @@ spec:
     metadata:
       annotations:
         configmap.reloader.stakater.com/reload: {{ include "perfsonar.reloaderConfigMapNames" . | quote }}
+        {{- if .Values.multus.enabled }}
+        k8s.v1.cni.cncf.io/networks: {{ required "multus.networks must be set when multus.enabled is true" .Values.multus.networks | quote }}
+        {{- end }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

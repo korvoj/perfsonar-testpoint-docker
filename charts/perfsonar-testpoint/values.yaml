@@ -20,6 +20,16 @@ service:
     enabled: true
     annotations: {}
 
+# -- Multus CNI deployment mode. When enabled, no Services are created (neither
+# service-headless nor service-loadbalancer) and the Multus network annotation
+# is added to the pod. Requires multus.networks to be set.
+multus:
+  enabled: false
+  # -- Value for the k8s.v1.cni.cncf.io/networks annotation.
+  # Can be a simple NAD name ("my-network") or a JSON array
+  # ('[{"name": "my-network", "interface": "net1"}]')
+  networks: ""
+
 # -- Host network mode. When enabled, the pod binds directly to the node's network interface.
 # Recommended: set service.default.enabled=false when using this mode, as port exposure is
 # already handled by the host network. Only one replica should run per node to avoid

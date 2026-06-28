@@ -1,4 +1,4 @@
-{{- if .Values.service.default.enabled }}
+{{- if and .Values.service.default.enabled (not .Values.multus.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
